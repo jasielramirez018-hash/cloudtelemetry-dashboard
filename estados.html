@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>CloudTelemetry · Galería de estados</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/controles.css">
+  <link rel="stylesheet" href="css/componentes.css">
+  <link rel="stylesheet" href="css/superposiciones.css">
+  <link rel="stylesheet" href="css/navegacion.css">
+  <link rel="stylesheet" href="css/estados.css">
+  <script src="js/estados.js" defer></script>
+  <style>
+    .gallery { max-width: 1100px; margin: 0 auto; padding: 1.25rem; display: grid; gap: 1.25rem; }
+    .gallery header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .gallery h1 { font-size: 1.4rem; }
+    .state-table { width: 100%; border-collapse: collapse; }
+    .state-table th, .state-table td { padding: 0.75rem; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--border-color); }
+    .state-table thead th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+    .state-table tbody th { font-size: 0.9rem; white-space: nowrap; }
+    .state-table td > * { min-width: 120px; }
+    .state-scroll { overflow-x: auto; }
+    .state-table .btn-icon { background: var(--border-color); }
+    .state-table input.switch { margin: 0; }
+    .state-table td > .switch { min-width: 44px; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  </svg>
+  <main class="gallery" style="background:none">
+    <header>
+      <div>
+        <h1>Galería de estados de los controles</h1>
+        <p class="card-subtext">Default · Hover · Focus · Disabled · Loading. Pasa el mouse o usa Tab sobre la columna Default para verlos en vivo. <a href="index.html">← Volver al dashboard</a></p>
+      </div>
+      <button type="button" class="theme-toggle" data-theme-toggle role="switch" aria-checked="false">
+        <span class="theme-toggle__label"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg> Modo oscuro</span>
+        <span class="switch-track" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <section class="card" aria-labelledby="g-botones">
+      <h2 class="card-title" id="g-botones">Botones</h2>
+      <div class="state-scroll"><table class="state-table">
+        <thead><tr><th scope="col">Variante</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Disabled</th><th scope="col">Loading</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Primario</th>
+            <td><button type="button" class="btn btn-primary" data-demo="default">Guardar</button></td>
+            <td><button type="button" class="btn btn-primary" data-demo="hover">Guardar</button></td>
+            <td><button type="button" class="btn btn-primary" data-demo="focus">Guardar</button></td>
+            <td><button type="button" class="btn btn-primary" disabled>Guardar</button></td>
+            <td><button type="button" class="btn btn-primary is-loading" aria-busy="true">Guardando…</button></td></tr>
+          <tr><th scope="row">Secundario</th>
+            <td><button type="button" class="btn btn-secondary" data-demo="default">Cancelar</button></td>
+            <td><button type="button" class="btn btn-secondary" data-demo="hover">Cancelar</button></td>
+            <td><button type="button" class="btn btn-secondary" data-demo="focus">Cancelar</button></td>
+            <td><button type="button" class="btn btn-secondary" disabled>Cancelar</button></td>
+            <td><button type="button" class="btn btn-secondary is-loading" aria-busy="true">Cargando…</button></td></tr>
+          <tr><th scope="row">Peligro</th>
+            <td><button type="button" class="btn btn-danger" data-demo="default">Reiniciar</button></td>
+            <td><button type="button" class="btn btn-danger" data-demo="hover">Reiniciar</button></td>
+            <td><button type="button" class="btn btn-danger" data-demo="focus">Reiniciar</button></td>
+            <td><button type="button" class="btn btn-danger" disabled>Reiniciar</button></td>
+            <td><button type="button" class="btn btn-danger is-loading" aria-busy="true">Reiniciando…</button></td></tr>
+          <tr><th scope="row">Borde peligro</th>
+            <td><button type="button" class="btn btn-outline-danger" data-demo="default">Eliminar</button></td>
+            <td><button type="button" class="btn btn-outline-danger" data-demo="hover">Eliminar</button></td>
+            <td><button type="button" class="btn btn-outline-danger" data-demo="focus">Eliminar</button></td>
+            <td><button type="button" class="btn btn-outline-danger" disabled>Eliminar</button></td>
+            <td><button type="button" class="btn btn-outline-danger is-loading" aria-busy="true">Eliminando…</button></td></tr>
+          <tr><th scope="row">Icono</th>
+            <td><button type="button" class="btn-icon" data-demo="default" aria-label="Notificaciones"><svg class="icon"><use href="#i-bell"/></svg></button></td>
+            <td><button type="button" class="btn-icon" data-demo="hover" aria-label="Notificaciones"><svg class="icon"><use href="#i-bell"/></svg></button></td>
+            <td><button type="button" class="btn-icon" data-demo="focus" aria-label="Notificaciones"><svg class="icon"><use href="#i-bell"/></svg></button></td>
+            <td><button type="button" class="btn-icon" disabled aria-label="Notificaciones"><svg class="icon"><use href="#i-bell"/></svg></button></td>
+            <td><span class="muted card-subtext">Usa botón con texto</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="card" aria-labelledby="g-campos">
+      <h2 class="card-title" id="g-campos">Campos de formulario</h2>
+      <div class="state-scroll"><table class="state-table">
+        <thead><tr><th scope="col">Control</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Disabled</th><th scope="col">Loading</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Texto</th>
+            <td><input class="form-control" type="text" placeholder="srv-prod-03" aria-label="Texto default" data-demo="default"></td>
+            <td><input class="form-control" type="text" placeholder="srv-prod-03" aria-label="Texto hover" data-demo="hover"></td>
+            <td><input class="form-control" type="text" placeholder="srv-prod-03" aria-label="Texto focus" data-demo="focus"></td>
+            <td><input class="form-control" type="text" placeholder="srv-prod-03" aria-label="Texto disabled" disabled></td>
+            <td><div class="input-wrap is-loading"><input class="form-control" type="text" value="srv-prod-03" aria-label="Texto loading" aria-busy="true" readonly></div></td></tr>
+          <tr><th scope="row">Área de texto</th>
+            <td><textarea class="form-control" rows="2" placeholder="Descripción" aria-label="Textarea default" data-demo="default"></textarea></td>
+            <td><textarea class="form-control" rows="2" placeholder="Descripción" aria-label="Textarea hover" data-demo="hover"></textarea></td>
+            <td><textarea class="form-control" rows="2" placeholder="Descripción" aria-label="Textarea focus" data-demo="focus"></textarea></td>
+            <td><textarea class="form-control" rows="2" placeholder="Descripción" aria-label="Textarea disabled" disabled></textarea></td>
+            <td><div class="input-wrap is-loading"><textarea class="form-control" rows="2" aria-label="Textarea loading" aria-busy="true" readonly>Guardando…</textarea></div></td></tr>
+          <tr><th scope="row">Dropdown</th>
+            <td><select class="form-control" aria-label="Dropdown default" data-demo="default"><option>us-east-1</option><option>eu-central-1</option></select></td>
+            <td><select class="form-control" aria-label="Dropdown hover" data-demo="hover"><option>us-east-1</option><option>eu-central-1</option></select></td>
+            <td><select class="form-control" aria-label="Dropdown focus" data-demo="focus"><option>us-east-1</option><option>eu-central-1</option></select></td>
+            <td><select class="form-control" aria-label="Dropdown disabled" disabled><option>us-east-1</option></select></td>
+            <td><div class="input-wrap is-loading"><select class="form-control" aria-label="Dropdown loading" aria-busy="true" disabled><option>Cargando regiones…</option></select></div></td></tr>
+          <tr><th scope="row">Fecha (calendario)</th>
+            <td><input class="form-control" type="date" value="2026-11-20" aria-label="Fecha default" data-demo="default"></td>
+            <td><input class="form-control" type="date" value="2026-11-20" aria-label="Fecha hover" data-demo="hover"></td>
+            <td><input class="form-control" type="date" value="2026-11-20" aria-label="Fecha focus" data-demo="focus"></td>
+            <td><input class="form-control" type="date" value="2026-11-20" aria-label="Fecha disabled" disabled></td>
+            <td><div class="input-wrap is-loading"><input class="form-control" type="date" aria-label="Fecha loading" aria-busy="true" disabled></div></td></tr>
+          <tr><th scope="row">Switch</th>
+            <td><input class="switch" type="checkbox" role="switch" aria-label="Switch default" data-demo="default"></td>
+            <td><input class="switch" type="checkbox" role="switch" aria-label="Switch hover" data-demo="hover"></td>
+            <td><input class="switch" type="checkbox" role="switch" aria-label="Switch focus" data-demo="focus" checked></td>
+            <td><input class="switch" type="checkbox" role="switch" aria-label="Switch disabled" disabled checked></td>
+            <td><input class="switch is-loading" type="checkbox" role="switch" aria-label="Switch loading" aria-busy="true" disabled checked></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+  </main>
+</body>
+</html>
