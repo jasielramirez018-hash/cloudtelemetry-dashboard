@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>CloudTelemetry · Dashboard</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/controles.css">
+  <link rel="stylesheet" href="css/componentes.css">
+  <link rel="stylesheet" href="css/superposiciones.css">
+  <link rel="stylesheet" href="css/navegacion.css">
+  <link rel="stylesheet" href="css/estados.css">
+  <script src="js/tema.js" defer></script>
+  <script src="js/toast.js" defer></script>
+  <script src="js/overlays.js" defer></script>
+  <script src="js/grafica.js" defer></script>
+  <script src="js/navegacion.js" defer></script>
+  <script src="js/tabla.js" defer></script>
+  <script src="js/formulario.js" defer></script>
+  <!-- Galería de estados: estados.html -->
+</head>
+<body>
+
+  <!-- Sprite de iconos SVG (consistencia visual: 2D) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-metrics" viewBox="0 0 24 24"><path d="M5 21V11M12 21V3M19 21v-7"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-rows" viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <div class="app-layout">
+    <div id="sidebar-overlay" class="backdrop" data-close="sidebar"></div>
+    <aside id="sidebar" class="app-sidebar" aria-label="Menú principal">
+      <div class="sidebar-header">
+        <div class="brand">
+          <span>CloudTelemetry</span>
+          <span class="status-dot" role="img" aria-label="Estado del sistema: operativo"></span>
+        </div>
+        <button type="button" class="btn-icon mobile-only" data-close="sidebar" aria-label="Cerrar menú">
+          <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+        </button>
+      </div>
+
+      <div class="user-profile mobile-only">
+        <div class="avatar" aria-hidden="true">A</div>
+        <div class="user-info">
+          <span>Hola, Admin</span>
+          <span class="user-role">Ingeniero Cloud</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Secciones">
+        <a href="#metricas" class="nav-item" data-view="metrics" aria-current="page">
+          <svg class="icon" aria-hidden="true"><use href="#i-metrics"/></svg>
+          <span>Métricas</span>
+        </a>
+        <a href="#instancias" class="nav-item" data-view="servers">
+          <svg class="icon" aria-hidden="true"><use href="#i-server"/></svg>
+          <span>Servidores</span>
+        </a>
+        <button type="button" class="nav-item" data-open="drawer" aria-haspopup="dialog">
+          <svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg>
+          <span>Configuración</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button type="button" class="theme-toggle theme-toggle--sidebar" data-theme-toggle role="switch" aria-checked="false">
+          <span class="theme-toggle__label">
+            <svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg>
+            Modo oscuro
+          </span>
+          <span class="switch-track" aria-hidden="true"></span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-content">
+
+      <header class="app-header">
+        <div class="header-left">
+          <button type="button" id="btn-open-sidebar" class="btn-icon mobile-only" data-open="sidebar"
+                  aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false">
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+          </button>
+
+          <div class="header-brand mobile-only">
+            <span>CloudTelemetry</span>
+            <span class="status-dot" role="img" aria-label="Estado del sistema: operativo"></span>
+          </div>
+
+          <nav class="breadcrumbs desktop-only" aria-label="Ruta de navegación">
+            <ol>
+              <li>
+                <a href="#metricas" data-view="metrics">
+                  <svg class="icon" aria-hidden="true"><use href="#i-home"/></svg>
+                  Home
+                </a>
+              </li>
+              <li><a href="#metricas" data-crumb-root data-view="metrics" aria-current="page">Dashboard</a></li>
+              <li data-crumb-section hidden><span data-crumb-label aria-current="page">Servidores</span></li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="header-right">
+          <button type="button" class="theme-toggle theme-toggle--header mobile-only" data-theme-toggle
+                  role="switch" aria-checked="false" aria-label="Modo oscuro">
+            <span class="switch-track" aria-hidden="true"></span>
+          </button>
+          <span class="user-greeting desktop-only">Hola, Admin</span>
+          <button type="button" id="btn-notifications" class="btn-icon desktop-only has-alert"
+                  aria-label="Notificaciones: 1 alerta nueva">
+            <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+          </button>
+          <div class="avatar" role="img" aria-label="Perfil de Admin">A</div>
+        </div>
+      </header>
+      <main id="main" class="app-main" tabindex="-1">
+        <div class="page-title" id="metricas">
+          <nav class="breadcrumbs breadcrumbs--mobile mobile-only" aria-label="Ruta de navegación">
+            <ol>
+              <li><a href="#metricas" data-crumb-root data-view="metrics" aria-current="page">Dashboard</a></li>
+              <li data-crumb-section hidden><span data-crumb-label aria-current="page">Servidores</span></li>
+            </ol>
+          </nav>
+          <a href="#metricas" id="back-link" class="back-link" data-view="metrics" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>
+            <span id="back-link-text">Volver</span>
+          </a>
+          <h1>
+            <span class="mobile-only">Hola, Admin</span>
+            <span class="desktop-only">Dashboard</span>
+          </h1>
+          <p class="subtitle mobile-only">Monitoreo en Tiempo Real</p>
+        </div>
+
+        <section class="bento-grid" aria-label="Métricas del sistema">
+          <article class="card card-cpu" aria-labelledby="cpu-title">
+            <header class="card-header">
+              <h2 class="card-title" id="cpu-title">CPU Usage</h2>
+              <span class="badge badge-success">Normal</span>
+            </header>
+
+            <div class="cpu-body">
+              <div class="cpu-reading">
+                <span class="metric-big">78.4%</span>
+                <span class="card-subtext">16 Cores Activos</span>
+              </div>
+              <p class="cpu-net desktop-only">
+                <span>Subida: <strong>450 Mbps</strong></span>
+                <span aria-hidden="true">|</span>
+                <span>Bajada: <strong>1.2 Gbps</strong></span>
+              </p>
+              <div class="chart-spark mobile-only" role="img" aria-label="Tendencia de CPU en las últimas 24 horas, al alza">
+                <svg class="chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none"
+                     data-series="10,28,42,48,50,40,50,58,62,70,68,80,78">
+                  <path class="chart-area"/><path class="chart-line"/>
+                </svg>
+              </div>
+            </div>
+            <div class="chart-full desktop-only" role="img"
+                 aria-label="Gráfica de uso de CPU en 24 horas: sube de 10% a cerca de 78%">
+              <ul class="chart-y" aria-hidden="true">
+                <li>100%</li><li>75%</li><li>50%</li><li>25%</li><li>0%</li>
+              </ul>
+              <div class="chart-plot">
+                <svg class="chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none"
+                     data-series="10,28,42,48,50,40,50,58,62,70,68,80,78">
+                  <path class="chart-area"/><path class="chart-line"/>
+                </svg>
+                <div class="chart-marker" data-index="4">
+                  <div class="chart-tip">
+                    <strong>Hoy, 12:49</strong>
+                    <span>16 Cores Activos</span>
+                    <span>Tendencia: 78.6%</span>
+                  </div>
+                </div>
+                <div class="chart-marker" data-index="6">
+                  <div class="chart-tip chart-tip--below">
+                    <strong>Hoy, 17:30</strong>
+                    <span>Subida: 450 Mbps</span>
+                    <span>Bajada: 1.2 Gbps</span>
+                  </div>
+                </div>
+              </div>
+              <ol class="chart-x" aria-hidden="true">
+                <li>0h</li><li>4h</li><li>8h</li><li>12h</li><li>16h</li><li>20h</li><li>24h</li>
+              </ol>
+            </div>
+
+            <div class="meter-row mobile-only">
+              <div class="progress" role="progressbar" aria-label="Uso de CPU" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78">
+                <span style="width: 78.4%"></span>
+              </div>
+              <span class="meter-label">78%</span>
+            </div>
+          </article>
+          <article class="card card-ram" aria-labelledby="ram-title">
+            <header class="card-header">
+              <h2 class="card-title" id="ram-title">RAM</h2>
+              <span class="metric-pct">24% libre</span>
+            </header>
+            <p class="metric-medium">12.2 GB <small>/ 16 GB</small></p>
+            <div class="meter" role="meter" aria-label="Memoria RAM usada" aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="76" aria-valuetext="76% usada, 24% libre">
+              <span class="meter-seg meter-used" style="width: 76%">76%</span>
+              <span class="meter-seg meter-free" style="width: 24%">24%</span>
+            </div>
+            <p class="card-footer-info">
+              <span>Usado: 12.2 GB</span>
+              <span aria-hidden="true">|</span>
+              <span>Disponible: 3.8 GB</span>
+            </p>
+          </article>
+
+          <article class="card card-bandwidth" aria-labelledby="bw-title">
+            <header class="card-header">
+              <h2 class="card-title" id="bw-title">Bandwidth</h2>
+            </header>
+            <div class="bandwidth-body">
+              <dl class="bandwidth-stats">
+                <div>
+                  <dt><svg class="icon" aria-hidden="true"><use href="#i-up"/></svg> Subida</dt>
+                  <dd>450 Mbps</dd>
+                </div>
+                <div>
+                  <dt><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg> Bajada</dt>
+                  <dd>1.2 Gbps</dd>
+                </div>
+              </dl>
+              <div class="mini-bars" role="img" aria-label="Tráfico reciente: picos y valles, con tendencia estable">
+                <span class="bar" style="--h: 40%"></span>
+                <span class="bar" style="--h: 70%"></span>
+                <span class="bar" style="--h: 50%"></span>
+                <span class="bar" style="--h: 90%"></span>
+                <span class="bar" style="--h: 60%"></span>
+                <span class="bar" style="--h: 80%"></span>
+              </div>
+            </div>
+          </article>
+
+          <section class="card card-servers" id="instancias" aria-labelledby="inst-title">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title" id="inst-title" tabindex="-1">Active Instances</h2>
+                <p class="card-subtext">Estado de Servers</p>
+              </div>
+              <button type="button" class="btn btn-secondary desktop-only" data-open="drawer" aria-haspopup="dialog">
+                <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+                Parámetros
+              </button>
+            </header>
+
+            <div class="table-toolbar">
+              <div class="search-wrap">
+                <label class="sr-only" for="filter-q">Buscar instancia</label>
+                <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+                <input type="search" id="filter-q" class="form-control" placeholder="Buscar por nombre o ubicación" autocomplete="off">
+              </div>
+              <div class="field-select">
+                <label class="sr-only" for="filter-status">Filtrar por estado</label>
+                <select id="filter-status" class="form-control">
+                  <option value="all">Todos los estados</option>
+                  <option value="ok">Normal</option>
+                  <option value="warning">Alerta</option>
+                  <option value="critical">Crítico</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="servers-table" role="table">
+                <caption class="sr-only">Instancias activas y su estado</caption>
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th role="columnheader" scope="col">Server</th>
+                    <th role="columnheader" scope="col">Location</th>
+                    <th role="columnheader" scope="col">Uptime</th>
+                    <th role="columnheader" scope="col">Load</th>
+                    <th role="columnheader" scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="instances-body" role="rowgroup"></tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <p id="page-info" aria-live="polite"></p>
+              <div class="pager">
+                <button type="button" id="page-prev" class="btn btn-secondary btn-sm">Anterior</button>
+                <button type="button" id="page-next" class="btn btn-secondary btn-sm">Siguiente</button>
+              </div>
+            </div>
+
+            <button type="button" id="btn-restart-critical" class="btn btn-danger btn-block mobile-only">
+              <svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>
+              Reiniciar Instancia Crítica
+            </button>
+          </section>
+
+        </section>
+      </main>
+    </div>
+  </div>
+  <div id="drawer-overlay" class="backdrop" data-close="drawer"></div>
+  <aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"
+         data-backdrop="drawer-overlay">
+    <header class="drawer-header">
+      <h2 id="drawer-title">Configuration</h2>
+      <button type="button" class="btn-icon" data-close="drawer" aria-label="Cerrar configuración">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </header>
+
+    <form id="config-form" class="drawer-form" novalidate>
+      <fieldset id="config-fields" class="drawer-body">
+        <div class="field">
+          <label for="cfg-name">Nombre del servidor</label>
+          <div class="input-wrap" id="cfg-name-wrap">
+            <input type="text" id="cfg-name" class="form-control" placeholder="srv-prod-03" autocomplete="off"
+                   required aria-describedby="cfg-name-hint cfg-name-error">
+          </div>
+          <p id="cfg-name-hint" class="field-hint">Mínimo 3 caracteres: minúsculas, números o guiones.</p>
+          <p id="cfg-name-error" class="field-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="cfg-desc">Descripción</label>
+          <textarea id="cfg-desc" class="form-control" rows="3" maxlength="200"
+                    placeholder="Ej. Servidor de producción para la API" aria-describedby="cfg-desc-count"></textarea>
+          <p id="cfg-desc-count" class="field-hint field-count">0 / 200</p>
+        </div>
+
+        <div class="field">
+          <label for="cfg-region">Región</label>
+          <select id="cfg-region" class="form-control">
+            <option value="us-east-1">us-east-1 · Washington</option>
+            <option value="us-south-1">us-south-1 · Dallas</option>
+            <option value="eu-central-1">eu-central-1 · Frankfurt</option>
+            <option value="ap-southeast-2">ap-southeast-2 · Sídney</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="cfg-date">Próximo mantenimiento</label>
+          <input type="date" id="cfg-date" class="form-control" aria-describedby="cfg-date-error">
+          <p id="cfg-date-error" class="field-error" hidden></p>
+        </div>
+
+        <fieldset class="field">
+          <legend>Network Options</legend>
+          <div class="toggle-list">
+            <label class="toggle-row"><span>Public Access</span><input type="checkbox" class="switch" role="switch" checked></label>
+            <label class="toggle-row"><span>Network</span><input type="checkbox" class="switch" role="switch" checked></label>
+            <label class="toggle-row"><span>Storage</span><input type="checkbox" class="switch" role="switch"></label>
+            <label class="toggle-row"><span>Security groups</span><input type="checkbox" class="switch" role="switch"></label>
+          </div>
+        </fieldset>
+      </fieldset>
+
+      <footer class="drawer-footer">
+        <button type="button" id="btn-cancel-config" class="btn btn-secondary" data-close="drawer">Cancelar</button>
+        <button type="submit" id="btn-save-config" class="btn btn-primary">Guardar cambios</button>
+      </footer>
+    </form>
+  </aside>
+
+  <div id="modal" class="modal-overlay">
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">
+          <svg class="icon" aria-hidden="true"><use href="#i-warn"/></svg>
+          <span id="modal-title-text">Reset Confirmation</span>
+        </h2>
+        <button type="button" class="btn-icon" id="btn-close-modal" data-close="modal" aria-label="Cerrar diálogo">
+          <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+        </button>
+      </div>
+      <p id="modal-desc">¿Seguro que quieres reiniciar esta instancia? Puede haber una interrupción temporal del servicio.</p>
+      <div class="modal-actions">
+        <button type="button" id="btn-cancel-modal" class="btn btn-secondary" data-close="modal" data-autofocus>Cancelar</button>
+        <button type="button" id="btn-confirm-modal" class="btn btn-danger">Confirmar</button>
+      </div>
+    </div>
+  </div>
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite"></div>
+</body>
+</html>
